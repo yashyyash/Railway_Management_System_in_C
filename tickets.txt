@@ -1,0 +1,15 @@
+******************************************
+TRAIN: Rajdhani Express
+BOARDING STATION: Sealdah Station
+DESTINATION STATION: thane
+CLASS: Sleeper Class
+TIME: 10:0
+******************************************
+DETAILS OF PASSENGERS:
+1. Name: yash mutatkar | Gender: male | Age: 22 | Seat No: 1
+2. Name: darshan aher | Gender: male | Age: 23 | Seat No: 2
+******************************************
+TOTAL AMOUNT: Rs.3681 Only
+******************************************
+
+
