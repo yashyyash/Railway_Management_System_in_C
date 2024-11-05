@@ -59,6 +59,3 @@ gcc railway_management.c -o railway_management
     - Use the retrieval option to fetch your booked ticket information.
 - **Admin**:
     - Admins can log in using the provided credentials to view all tickets or search for specific tickets by username.
-
-## Contributing
-- **Contributions are welcome! Feel free to submit a pull request or open an issue to suggest improvements**.
