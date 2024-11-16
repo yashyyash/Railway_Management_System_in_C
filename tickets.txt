@@ -13,3 +13,27 @@ TOTAL AMOUNT: Rs.3681 Only
 ******************************************
 
 
+******************************************
+TRAIN: Rajdhani Express
+BOARDING STATION: Sealdah Station
+DESTINATION STATION: kalwa
+CLASS: Sleeper Class
+TIME: 10:0
+******************************************
+DETAILS OF PASSENGERS:
+1. Name: yash | Gender: male | Age: 12 | Seat No: 12
+2. Name: anil | Gender: 25 | Age: 12 | Seat No: 13
+******************************************
+TOTAL AMOUNT: Rs.3681 Only
+******************************************
+
+
+Train: Satabdi Express
+Boarding Station: Howrah Station
+Destination Station: mumbai
+Class: 3A Class
+Boarding Time: 5:0
+Total Fare: 2125 Rs
+Passengers:
+Passenger 1: yash m, Gender: male, Age: 4, Seat Number: 1
+----------------------------------------

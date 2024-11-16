@@ -19,6 +19,8 @@ Node* start = NULL;
 char source[MAX_NAME_LEN], des[MAX_NAME_LEN], train[40];
 char station[40], cla[40];
 int time1, time2, a[55];
+const char* admin_username = "Admin";
+const char* admin_password = "Admin@1234";
 const char* ticket_file = "tickets.txt";
 const char* login_file = "logins.txt";
 
@@ -37,7 +39,7 @@ void retrieve_ticket();
 void main() {
     int j, d;
     char choice;
-    
+
     printf("Welcome to the Railway Reservation System\n");
     printf("1. Login\n2. Register\n3. Admin Login\n4. Retrieve Ticket\n");
     printf("Enter your choice: ");
@@ -259,50 +261,111 @@ void bill(int y, int p) {
     printf("\t\t\t* BOARDING STATION:\t%s\n", station);
     printf("\t\t\t* DESTINATION STATION:\t%s\n", des);
     printf("\t\t\t* CLASS:\t%s\n", cla);
-    printf("\t\t\t* TIME:\t%d:%d\n", time1, time2);
-    printf("\t\t\t******************************************\n");
-    printf("\t\t\t* DETAILS OF PASSENGERS *\n");
+    printf("\t\t\t* BOARDING TIME:\t%d: %d\n", time1, time2);
+    printf("\t\t\t* TOTAL FARE:\t%d Rs\n", y);
+    printf("\t\t\t*........................................*\n");
+    printf("\t\t\t* PASSENGERS:\n");
 
     for (i = 1; i <= p; i++) {
-        printf("\t\t\t* %d. Name: %s | Gender: %s | Age: %d | Seat No: %d\n",
-               i, ptr->name, ptr->gen, ptr->age, ptr->seat);
+        printf("\t\t\t\t%d. %s\n", i, ptr->name);
+        printf("\t\t\t\t\tGender:\t%s\n", ptr->gen);
+        printf("\t\t\t\t\tAge:\t%d\n", ptr->age);
+        printf("\t\t\t\t\tSeat Number:\t%d\n", ptr->seat);
         ptr = ptr->link;
     }
-    printf("\t\t\t******************************************\n");
-    printf("\t\t\tTOTAL AMOUNT: Rs.%d Only\n", y);
-    printf("\t\t\t******************************************\n");
-    printf("\t\t\t**\tTHANK YOU! HAVE A SAFE JOURNEY\t **\n");
+
+    printf("\t\t\t*........................................*\n");
     printf("\t\t\t******************************************\n\n\n");
+    printf("\t\t\t\tThank You! Visit Again!!\n\n\n");
 }
 
-void save_ticket(int amount, int num_passengers) {
-    FILE* file = fopen(ticket_file, "a");
+void save_ticket(int fare, int passenger_count) {
+    FILE* fp = fopen(ticket_file, "a");
+    if (fp == NULL) {
+        printf("Error opening file for saving ticket details.\n");
+        return;
+    }
+
     Node* ptr = start;
+    fprintf(fp, "Train: %s\n", train);
+    fprintf(fp, "Boarding Station: %s\n", station);
+    fprintf(fp, "Destination Station: %s\n", des);
+    fprintf(fp, "Class: %s\n", cla);
+    fprintf(fp, "Boarding Time: %d:%d\n", time1, time2);
+    fprintf(fp, "Total Fare: %d Rs\n", fare);
+    fprintf(fp, "Passengers:\n");
 
-    fprintf(file, "******************************************\n");
-    fprintf(file, "TRAIN: %s\n", train);
-    fprintf(file, "BOARDING STATION: %s\n", station);
-    fprintf(file, "DESTINATION STATION: %s\n", des);
-    fprintf(file, "CLASS: %s\n", cla);
-    fprintf(file, "TIME: %d:%d\n", time1, time2);
-    fprintf(file, "******************************************\n");
-    fprintf(file, "DETAILS OF PASSENGERS:\n");
-
-    for (int i = 1; i <= num_passengers; i++) {
-        fprintf(file, "%d. Name: %s | Gender: %s | Age: %d | Seat No: %d\n",
+    for (int i = 1; i <= passenger_count; i++) {
+        fprintf(fp, "Passenger %d: %s, Gender: %s, Age: %d, Seat Number: %d\n",
                 i, ptr->name, ptr->gen, ptr->age, ptr->seat);
         ptr = ptr->link;
     }
-    fprintf(file, "******************************************\n");
-    fprintf(file, "TOTAL AMOUNT: Rs.%d Only\n", amount);
-    fprintf(file, "******************************************\n\n\n");
 
-    fclose(file);
+    fprintf(fp, "----------------------------------------\n");
+    fclose(fp);
+    printf("Ticket details saved successfully!\n");
 }
 
+void retrieve_ticket() {
+    FILE* fp = fopen(ticket_file, "r");
+    if (fp == NULL) {
+        printf("Error opening file for reading ticket details.\n");
+        return;
+    }
+
+    char line[256];
+    while (fgets(line, sizeof(line), fp)) {
+        printf("%s", line);
+    }
+
+    fclose(fp);
+}
+
+void register_user(char* username) {
+    char password[MAX_NAME_LEN];
+
+    printf("Enter a Password: ");
+    fflush(stdin);
+    fgets(password, MAX_NAME_LEN, stdin);
+    password[strcspn(password, "\n")] = '\0';  // Corrected: Removed extra parentheses
+
+    FILE* fp = fopen(login_file, "a");
+    if (fp == NULL) {
+        printf("Error opening login file for registration.\n");
+        return;
+    }
+
+    fprintf(fp, "%s %s\n", username, password);
+    fclose(fp);
+
+    printf("Registration successful! You can now log in.\n");
+}
+
+void admin_login() {
+    char username[MAX_NAME_LEN];
+    char password[MAX_NAME_LEN];
+
+    printf("Enter Admin Username: ");
+    fflush(stdin);
+    fgets(username, MAX_NAME_LEN, stdin);
+    username[strcspn(username, "\n")] = '\0';
+
+    printf("Enter Admin Password: ");
+    fflush(stdin);
+    fgets(password, MAX_NAME_LEN, stdin);
+    password[strcspn(password, "\n")] = '\0';
+
+    if (strcmp(username, admin_username) == 0 && strcmp(password, admin_password) == 0) {
+        printf("Admin login successful!\n");
+        // Call the admin function to view tickets or perform other admin tasks
+        view_tickets();
+    } else {
+        printf("Invalid admin credentials.\n");
+    }
+}
 void login() {
-    char username[MAX_NAME_LEN], password[MAX_NAME_LEN];
-    FILE* file;
+    char username[MAX_NAME_LEN];
+    char password[MAX_NAME_LEN];
 
     printf("Enter Username: ");
     fflush(stdin);
@@ -313,120 +376,19 @@ void login() {
     fflush(stdin);
     fgets(password, MAX_NAME_LEN, stdin);
     password[strcspn(password, "\n")] = '\0';
-
-    file = fopen(login_file, "r");
-    if (file == NULL) {
-        printf("Error: Cannot open login file.\n");
-        return;
-    }
-
-    char file_username[MAX_NAME_LEN], file_password[MAX_NAME_LEN];
-    int found = 0;
-
-    while (fscanf(file, "%s %s", file_username, file_password) != EOF) {
-        if (strcmp(username, file_username) == 0 && strcmp(password, file_password) == 0) {
-            printf("Login Successful!\n");
-            found = 1;
-            break;
-        }
-    }
-
-    if (!found) {
-        printf("Login failed. Registering as a new user...\n");
-        fclose(file);
-        file = fopen(login_file, "a");
-        fprintf(file, "%s %s\n", username, password);
-        printf("Registration Successful! You can now log in.\n");
-    }
-
-    fclose(file);
-}
-
-void admin_login() {
-    char admin_user[MAX_NAME_LEN], admin_pass[MAX_NAME_LEN];
-
-    printf("Enter Admin Username: ");
-    fflush(stdin);
-    fgets(admin_user, MAX_NAME_LEN, stdin);
-    admin_user[strcspn(admin_user, "\n")] = '\0';
-
-    printf("Enter Admin Password: ");
-    fflush(stdin);
-    fgets(admin_pass, MAX_NAME_LEN, stdin);
-    admin_pass[strcspn(admin_pass, "\n")] = '\0';
-
-    if (strcmp(admin_user, "Admin") == 0 && strcmp(admin_pass, "Admin@1234") == 0) {
-        printf("Admin Login Successful!\n");
-        view_tickets();
-    } else {
-        printf("Invalid Admin Credentials. Exiting...\n");
-    }
+    
+    // Implement actual authentication logic here
 }
 
 void view_tickets() {
-    char choice, search_user[MAX_NAME_LEN];
-
-    printf("1. View All Tickets\n2. Search Tickets by Username\nEnter your choice: ");
-    fflush(stdin);
-    scanf("%c", &choice);
-
-    if (choice == '1') {
-        FILE* file = fopen(ticket_file, "r");
-        if (file == NULL) {
-            printf("Error: Cannot open ticket file.\n");
-            return;
-        }
-
-        char ch;
-        while ((ch = fgetc(file)) != EOF)
-            putchar(ch);
-
-        fclose(file);
-    } else if (choice == '2') {
-        printf("Enter Username to Search: ");
-        fflush(stdin);
-        fgets(search_user, MAX_NAME_LEN, stdin);
-        search_user[strcspn(search_user, "\n")] = '\0';
-        search_tickets(search_user);
-    } else {
-        printf("Invalid choice. Exiting...\n");
-    }
-}
-
-void search_tickets(char* username) {
-    FILE* file = fopen(ticket_file, "r");
-    char line[256];
-    int found = 0;
-
-    if (file == NULL) {
-        printf("Error: Cannot open ticket file.\n");
+    FILE* fp = fopen(ticket_file, "r");
+    if (fp == NULL) {
+        printf("Error opening file for reading tickets.\n");
         return;
     }
-
-    while (fgets(line, sizeof(line), file)) {
-        if (strstr(line, username)) {
-            found = 1;
-            printf("Ticket Found:\n%s", line);
-            while (fgets(line, sizeof(line), file) && strncmp(line, "******************************************", 42) != 0) {
-                printf("%s", line);
-            }
-            printf("\n");
-        }
+    char line[256];
+    while (fgets(line, sizeof(line), fp)) {
+        printf("%s", line);
     }
-
-    if (!found)
-        printf("No tickets found for user: %s\n", username);
-
-    fclose(file);
-}
-
-void retrieve_ticket() {
-    char username[MAX_NAME_LEN];
-
-    printf("Enter Username to Retrieve Ticket: ");
-    fflush(stdin);
-    fgets(username, MAX_NAME_LEN, stdin);
-    username[strcspn(username, "\n")] = '\0';
-
-    search_tickets(username);
+    fclose(fp);
 }
