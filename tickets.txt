@@ -37,3 +37,30 @@ Total Fare: 2125 Rs
 Passengers:
 Passenger 1: yash m, Gender: male, Age: 4, Seat Number: 1
 ----------------------------------------
+Train: Rajdhani Express
+Boarding Station: Sealdah Station
+Destination Station: mumbai
+Class: 3A Class
+Boarding Time: 10:0
+Total Fare: 2476 Rs
+Passengers:
+Passenger 1: ggyashm, Gender: male, Age: 12, Seat Number: 50
+----------------------------------------
+Train: Rajdhani Express
+Boarding Station: Sealdah Station
+Destination Station: mumbai
+Class: 3A Class
+Boarding Time: 10:0
+Total Fare: 2476 Rs
+Passengers:
+Passenger 1: yash, Gender: male, Age: 22, Seat Number: 1
+----------------------------------------
+Train: Rajdhani Express
+Boarding Station: Sealdah Station
+Destination Station: delhi
+Class: Sleeper Class
+Boarding Time: 10:0
+Total Fare: 1840 Rs
+Passengers:
+Passenger 1: ggyashm, Gender: male, Age: 23, Seat Number: 2
+----------------------------------------
